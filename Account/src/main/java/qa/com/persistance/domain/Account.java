@@ -8,29 +8,36 @@ import javax.persistence.Id;
 
 @Entity
 public class Account {
-
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	
+	public Account() {
+	}
+	
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id 
 	private Integer accountNumber;
+	
+	@Column(length=50)
+	private String firstName;
+	
+	@Column(length=50)
+	private String secondName;
+	
 	public int getAccountNumber() {
-		return this.accountNumber;
+		return accountNumber;
 	}
 	public void setAccountNumber(int accountNo) {
 		this.accountNumber = accountNo;
 	}
 	
-	@Column(length=50)
-	private String firstName;
 	public String getFirstName() {
-		return this.firstName;
+		return firstName;
 	}
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 	
-	@Column(length=50)
-	private String secondName;
 	public String getSecondName() {
-		return this.firstName;
+		return firstName;
 	}
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;

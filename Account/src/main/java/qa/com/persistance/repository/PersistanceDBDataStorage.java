@@ -1,6 +1,7 @@
 package qa.com.persistance.repository;
 
 import static javax.transaction.Transactional.TxType.REQUIRED;
+import static javax.transaction.Transactional.TxType.SUPPORTS;
 
 import java.util.List;
 
@@ -12,36 +13,42 @@ import javax.transaction.Transactional;
 
 import qa.com.persistance.domain.Account;
 
+@Transactional(SUPPORTS)
 @Default
 public class PersistanceDBDataStorage implements DataStorageMethodInterface{
 
 	@PersistenceContext(unitName = "primary")
-	private EntityManager em;
-	
+	private EntityManager manager;
+
 
 	@Transactional(REQUIRED)
 	public void setPerson(Account newUserAccount) {
-		em.persist(newUserAccount);
+		manager.persist(newUserAccount);
 	}
 
 	@Transactional(REQUIRED)
 	public void updateUserDetails(Account AccountToBeUpdated) {
-		em.merge(AccountToBeUpdated);	
+		manager.merge(AccountToBeUpdated);	
 	}
 
 	@Transactional(REQUIRED)
 	public void deleteUserDetails(Account accountToBeDeleted) {
-		em.remove(accountToBeDeleted);
+		manager.remove(accountToBeDeleted);
 	}
 	
 
 	public Account getPerson(int accountNumber) {
-		TypedQuery<Account> query = em.createQuery("SELECT a FROM Accounts a WHERE a.accountNumber='" + accountNumber + "'", Account.class);
+		TypedQuery<Account> query = manager.createQuery("SELECT * FROM Account WHERE accountNumber=" + accountNumber + ";", Account.class);
 		return query.getSingleResult();
 	}
 
 	public List<Account> getAllUsers() {
-		TypedQuery<Account> query = em.createQuery("SELECT a FROM Accounts a", Account.class);
+		TypedQuery<Account> query = manager.createQuery("SELECT * FROM Account;", Account.class);
 		return query.getResultList();
 	}
+	
+	public void setManager(EntityManager manager) {
+		this.manager = manager;
+	}
+
 }

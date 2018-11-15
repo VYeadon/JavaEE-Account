@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class JSONToJavaUtility {
 
-    private static Gson gson;
+    private static Gson gson = new Gson();;
 
     public JSONToJavaUtility() {
         this.gson = new Gson();

@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import qa.com.persistance.domain.Account;
 import qa.com.persistance.repository.DataStorageMethodInterface;
 import qa.com.util.JSONToJavaUtility;
+import qa.com.service.AccountServiceInterface;
 
 public class AccountService implements AccountServiceInterface{
 	
