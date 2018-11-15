@@ -10,7 +10,7 @@ public class JSONToJavaUtility {
         this.gson = new Gson();
     }
 
-    public String getJSONFromObject(Object obj) {
+    public static String getJSONFromObject(Object obj) {
         return gson.toJson(obj);
     }
 

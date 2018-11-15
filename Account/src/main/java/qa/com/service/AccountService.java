@@ -1,7 +1,5 @@
 package qa.com.service;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import qa.com.persistance.domain.Account;
@@ -13,7 +11,7 @@ public class AccountService implements AccountServiceInterface{
 	@Inject
 	private DataStorageMethodInterface dataRepository;
 	
-	public void createUserAccount(String JSONUserInfoString)
+	public Account createUserAccount(String JSONUserInfoString)
 	{
 		Account newUser =
 		JSONToJavaUtility.getObjectFromJSON(JSONUserInfoString, Account.class);
@@ -21,9 +19,12 @@ public class AccountService implements AccountServiceInterface{
 		if(newUser.getAccountNumber() == 999)
 		{
 			System.out.println("Invalid account number");
+			return null;
 		}
 		
 		dataRepository.setPerson(newUser);
+		
+		return newUser;
 	}
 	
 	public Account getUserAccount(int accountNumber)
@@ -32,24 +33,38 @@ public class AccountService implements AccountServiceInterface{
 		dataRepository.getPerson(accountNumber);
 	}
 	
-	public List<Account> getAllUserAccounts()
+	public String getAllUserAccounts()
 	{
 		return
-		dataRepository.getAllUsers();
+		JSONToJavaUtility.getJSONFromObject(
+						dataRepository.getAllUsers());
 	}
 	
-	public void updateUserDetails(int accountNumber, String JSONOfFirstandLastName)
+	public Account updateUserDetails(int accountNumber, String JSONOfFirstandLastName)
 	{
 		Account updatedUserAccount =
 				JSONToJavaUtility.getObjectFromJSON(JSONOfFirstandLastName, Account.class);
 		updatedUserAccount.setAccountNumber(accountNumber);
 		
 		dataRepository.updateUserDetails(updatedUserAccount);
+		
+		return updatedUserAccount;
 	}
 	
-	public void deleteUser(int accountNumber)
+	public boolean deleteUser(int accountNumber)
 	{
-		dataRepository.deleteUserDetails(getUserAccount(accountNumber));
+		if(getUserAccount(accountNumber) == null)
+		{
+			System.out.println("No such account");
+			return false;
+		}
+		else 
+		{
+			dataRepository.deleteUserDetails(getUserAccount(accountNumber));
+			return true;
+		}
+		
+		
 	}
 
 }
